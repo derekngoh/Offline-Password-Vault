@@ -1,4 +1,4 @@
-from binaryConvert import BinaryConvert
+import binaryConvert as bc
 
 class BlackBox:
   """ 
@@ -27,8 +27,8 @@ class BlackBox:
     mlen = len(msg)
     klen = len(key)
     padded_key = self.pad_key_to_msg_length(key, klen, mlen)
-    binary_padded_key = BinaryConvert(padded_key).conv_text_to_binary()
-    binary_message = BinaryConvert(msg).conv_text_to_binary()
+    binary_padded_key = bc.conv_text_to_binary(padded_key)
+    binary_message = bc.conv_text_to_binary(msg)
     if len(binary_padded_key) != len(binary_message):
       raise Exception("Key & message length not equal!")
     non_padded_ciphertext = bin(int(binary_padded_key, 2)^int(binary_message, 2))
@@ -42,13 +42,13 @@ class BlackBox:
     klen = len(key)
     encmlen = int(len(enc_message)/bits)
     padded_key = self.pad_key_to_msg_length(key, klen, encmlen)
-    binary_padded_key = BinaryConvert(padded_key).conv_text_to_binary()
+    binary_padded_key = bc.conv_text_to_binary(padded_key)
     binary_enc = enc_message
     if len(binary_padded_key) != len(enc_message):
       raise Exception("Key & message length not equal!")
     non_padded_decoded_text = bin(int(binary_padded_key, 2)^int(enc_message, 2))
     decoded_binary = ('%0' + str(len(binary_padded_key)) + 'd') % int(non_padded_decoded_text[2:])
-    decoded_text = BinaryConvert(decoded_binary).conv_binary_to_text()
+    decoded_text = bc.conv_binary_to_text(decoded_binary)
 
     return decoded_text
 
